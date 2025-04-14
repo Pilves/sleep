@@ -1,5 +1,5 @@
 // src/lib/stores/authStore.js
-import { writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { auth } from '$lib/firebase/firebase.client.js';
 import {
 	signInWithEmailAndPassword,
@@ -11,8 +11,10 @@ import api from '$lib/services/api.client.js';
 
 export const authUser = writable(null);
 export const authToken = writable(null);
+export const userRoles = writable([]);
 export const authLoading = writable(true);
 export const authError = writable(null);
+export const isAdmin = derived(userRoles, $userRoles => $userRoles.includes('admin'));
 
 onAuthStateChanged(auth, async (user) => {
 	authError.set(null);
@@ -21,6 +23,15 @@ onAuthStateChanged(auth, async (user) => {
 			const idToken = await user.getIdToken();
 			authUser.set(user);
 			authToken.set(idToken);
+			
+			// Fetch user profile to get roles
+			try {
+				const userResponse = await api.get('/users/profile');
+				userRoles.set(userResponse.data.roles || ['user']);
+			} catch (profileErr) {
+				console.error('Error fetching user profile:', profileErr);
+				userRoles.set(['user']);
+			}
 		} catch (err) {
 			authError.set(err.message);
 			await signOut(auth);
@@ -28,6 +39,7 @@ onAuthStateChanged(auth, async (user) => {
 	} else {
 		authUser.set(null);
 		authToken.set(null);
+		userRoles.set([]);
 	}
 	authLoading.set(false);
 });
