@@ -6,7 +6,7 @@ import { authToken } from '$lib/stores/authStore.js';
 import { auth } from '$lib/firebase/firebase.client.js';
 
 // Use hardcoded backend URL for now - GitHub Pages deployment issue
-const BACKEND_URL = 'https://157.180.75.112';
+const BACKEND_URL = 'https://api.chaidla.ee';
 
 const api = axios.create({
 	baseURL: browser ? BACKEND_URL : '',
@@ -21,7 +21,7 @@ api.interceptors.request.use(
 		if (browser) {
 			// Get current token value from store
 			const token = get(authToken);
-	
+
 			if (token) {
 				config.headers['Authorization'] = `Bearer ${token}`;
 			}
@@ -38,21 +38,21 @@ api.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		const originalRequest = error.config;
-	
+
 		// If error is token expired and we haven't already tried to refresh
 		if (browser && error.response?.status === 401 &&
 			error.response?.data?.error === 'TokenExpired' &&
 			!originalRequest._retry) {
-	
+
 			originalRequest._retry = true;
-	
+
 			try {
 				// Refresh the token
 				const user = auth.currentUser;
 				if (user) {
 					const newToken = await user.getIdToken(true);
 					authToken.set(newToken);
-	
+
 					// Update the auth header and retry
 					originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
 					return api(originalRequest);
@@ -63,13 +63,13 @@ api.interceptors.response.use(
 				}
 			}
 		}
-		
+
 		// Redirect to homepage on auth failure (401 Unauthorized or 403 Forbidden)
 		if (browser && (error.response?.status === 401 || error.response?.status === 403)) {
 			// Check if we're not already on a public page
 			const currentPath = window.location.pathname;
 			const publicPaths = ['/', '/login', '/register', '/forgot-password', '/reset-password'];
-			
+
 			if (!publicPaths.some(path => currentPath === path || currentPath.startsWith(path))) {
 				if (import.meta.env.DEV) {
 					console.log('Redirecting to homepage due to authentication failure');
@@ -77,7 +77,7 @@ api.interceptors.response.use(
 				window.location.href = '/';
 			}
 		}
-	
+
 		return Promise.reject(error);
 	}
 );
