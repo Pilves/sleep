@@ -1,0 +1,36 @@
+# Node modules
+node_modules
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+build/
+dist/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Development and test files
+*.test.js
+tests/
+coverage/
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Miscellaneous
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
