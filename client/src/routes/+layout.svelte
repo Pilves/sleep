@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import Header from '$lib/components/Header.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
-	import '../app.css';
+	import './app.css';
 
 	// Paths that should use the sidebar layout
 	const sidebarPaths = [
