@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { authError } from '$lib/stores/authStore';
 	import { authApi } from '$lib/services/api.client.js';
+	import { base } from '$app/paths';
 
 	let email = '';
 	let password = '';
@@ -129,13 +130,13 @@
 					// If server indicated user needs to login separately
 					successMessage = 'Account created! Please sign in with your credentials.';
 					setTimeout(() => {
-						goto('/login?newRegistration=true');
+						goto(`${base}/login?newRegistration=true`);
 					}, 2000);
 				} else {
 					// Regular success case
 					successMessage = 'Account created successfully!';
 					setTimeout(() => {
-						goto('/profile?newUser=true');
+						goto(`${base}/profile?newUser=true`);
 					}, 1500);
 				}
 			} catch (backendError) {
@@ -301,8 +302,8 @@
 				<div class="form-group checkbox-group">
 					<label class="checkbox-label">
 						<input type="checkbox" bind:checked={termsAccepted} required/>
-						<span>I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a
-								href="/privacy" target="_blank">Privacy Policy</a></span>
+						<span>I agree to the <a href="{base}/terms" target="_blank">Terms of Service</a> and <a
+								href="{base}/privacy" target="_blank">Privacy Policy</a></span>
 					</label>
 				</div>
 
@@ -319,7 +320,7 @@
 			</form>
 
 			<div class="form-footer">
-				<p>Already have an account? <a href="/login">Log in</a></p>
+				<p>Already have an account? <a href="{base}/login">Log in</a></p>
 			</div>
 		{/if}
 	</div>

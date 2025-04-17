@@ -2,6 +2,7 @@
 import { writable, derived } from 'svelte/store';
 import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
+import { base } from '$app/paths';
 import {
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
@@ -87,7 +88,7 @@ export async function loginUser(email, password) {
 }
 
 // Function to check authentication and redirect if not authenticated
-export function requireAuth(returnTo = '/login') {
+export function requireAuth(returnTo = `${base}/login`) {
 	if (browser && !authLoading.get()) {
 		if (!auth.currentUser) {
 			// Redirect to login page if not authenticated

@@ -4,6 +4,7 @@ import { onMount } from 'svelte';
 import { browser } from '$app/environment';
 import { authUser } from '$lib/stores/authStore';
 import { goto } from '$app/navigation';  
+import { base } from '$app/paths';
 
 // Redirect to dashboard after a short delay if user is authenticated
 // otherwise redirect to login page
@@ -11,9 +12,9 @@ onMount(() => {
   if (browser) {
     setTimeout(() => {
       if ($authUser) {
-        goto('/dashboard'); 
+        goto(`${base}/dashboard`); 
       } else {
-        goto('/login');     
+        goto(`${base}/login`);     
       }
     }, 2000);
   }
@@ -27,8 +28,8 @@ onMount(() => {
     <p>You'll be redirected {$authUser ? 'to the dashboard' : 'to login'} in a few seconds...</p>
     
     <div class="buttons">
-      <a href="/dashboard" class="btn primary">Go to Dashboard</a>
-      <a href="/" class="btn secondary">Go to Home</a>
+      <a href="{base}/dashboard" class="btn primary">Go to Dashboard</a>
+      <a href="{base}/" class="btn secondary">Go to Home</a>
     </div>
   </div>
 </div>

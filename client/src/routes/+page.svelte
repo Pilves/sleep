@@ -1,5 +1,29 @@
 <script>
   import { authUser } from '$lib/stores/authStore';
+  import { base } from '$app/paths';
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
+  
+  // Handle redirects from 404.html for GitHub Pages SPA routing
+  onMount(() => {
+    if (browser) {
+      const params = new URLSearchParams(window.location.search);
+      const redirectPath = params.get('redirect');
+      
+      if (redirectPath) {
+        // Remove the redirect parameter to prevent loops
+        params.delete('redirect');
+        const newUrl = new URL(window.location.href);
+        newUrl.search = params.toString();
+        history.replaceState(null, '', newUrl.toString());
+        
+        // Navigate to the correct path with base
+        const fullPath = `${base}${redirectPath}`;
+        goto(fullPath);
+      }
+    }
+  });
 </script>
 
 <div class="landing-page">
@@ -10,12 +34,12 @@
 
       {#if !$authUser}
         <div class="cta-buttons">
-          <a href="/login" class="btn primary">Login</a>
-          <a href="/register" class="btn secondary">Register</a>
+          <a href="{base}/login" class="btn primary">Login</a>
+          <a href="{base}/register" class="btn secondary">Register</a>
         </div>
       {:else}
         <div class="cta-buttons">
-          <a href="/dashboard" class="btn primary">Go to Dashboard</a>
+          <a href="{base}/dashboard" class="btn primary">Go to Dashboard</a>
         </div>
       {/if}
     </div>
@@ -100,9 +124,9 @@
       <p>Join Sleep Olympics today and start your journey to better sleep.</p>
 
       {#if !$authUser}
-        <a href="/register" class="btn primary large">Get Started</a>
+        <a href="{base}/register" class="btn primary large">Get Started</a>
       {:else}
-        <a href="/dashboard" class="btn primary large">Go to Dashboard</a>
+        <a href="{base}/dashboard" class="btn primary large">Go to Dashboard</a>
       {/if}
     </div>
   </section>

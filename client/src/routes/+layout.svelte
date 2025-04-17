@@ -7,8 +7,9 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import './app.css';
 	import { goto } from '$app/navigation'; // Make sure goto is imported
+	import { base } from '$app/paths';
 
-	// Paths that should use the sidebar layout
+	// Paths that should use the sidebar layout (without the base path)
 	const sidebarPaths = [
 		'/dashboard',
 		'/competitions',
@@ -18,7 +19,7 @@
 		'/admin'
 	];
 
-	// Public paths that don't require authentication
+	// Public paths that don't require authentication (without the base path)
 	const publicPaths = [
 		'/',
 		'/login',
@@ -27,22 +28,25 @@
 		'/reset-password'
 	];
 
+	// Get the path without the base prefix for path matching
+	$: pathWithoutBase = $page.url.pathname.replace(base, '');
+
 	// Determine if current path should use sidebar layout
 	$: useSidebar = $authUser &&
 			!$authLoading &&
-			sidebarPaths.some(path => $page.url.pathname.startsWith(path));
+			sidebarPaths.some(path => pathWithoutBase.startsWith(path));
 
 	// Check if the current path requires authentication
 	$: requiresAuth = !publicPaths.some(path =>
-			$page.url.pathname === path ||
-			$page.url.pathname.startsWith(path)
+			pathWithoutBase === path ||
+			pathWithoutBase.startsWith(path)
 	);
 
 	// Handle authentication redirect
 	$: if (browser && !$authLoading) {
 		if (requiresAuth && !$authUser) {
 			// Redirect to login page if accessing protected route without auth
-			goto('/login'); // Use goto here!
+			goto(`${base}/login`); // Use goto here with base path!
 		}
 	}
 </script>
@@ -68,9 +72,9 @@
 			<div class="footer-content">
 				<p>&copy; {new Date().getFullYear()} Sleep Olympics. All rights reserved.</p>
 				<div class="footer-links">
-					<a href="/privacy">Privacy Policy</a>
-					<a href="/terms">Terms of Service</a>
-					<a href="/contact">Contact Us</a>
+					<a href="{base}/privacy">Privacy Policy</a>
+					<a href="{base}/terms">Terms of Service</a>
+					<a href="{base}/contact">Contact Us</a>
 				</div>
 			</div>
 		</div>

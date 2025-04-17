@@ -4,6 +4,7 @@
   import { goto } from '$app/navigation';
   import { authUser, authLoading } from '$lib/stores/authStore';
   import { page } from '$app/stores';
+  import { base } from '$app/paths';
   
   // Get the current path for display
   $: currentPath = $page.url.pathname;
@@ -13,9 +14,9 @@
     if (browser) {
       setTimeout(() => {
         if ($authUser) {
-          goto('/dashboard');
+          goto(`${base}/dashboard`);
         } else {
-          goto('/login');
+          goto(`${base}/login`);
         }
       }, 2000);
     }
@@ -29,8 +30,8 @@
     <p>You'll be redirected {$authUser ? 'to the dashboard' : 'to login'} in a few seconds...</p>
     
     <div class="actions">
-      <a href="/dashboard" class="btn primary">Go to Dashboard</a>
-      <a href="/" class="btn secondary">Go to Home</a>
+      <a href="{base}/dashboard" class="btn primary">Go to Dashboard</a>
+      <a href="{base}/" class="btn secondary">Go to Home</a>
     </div>
   </div>
 </div>
