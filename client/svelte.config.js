@@ -15,7 +15,7 @@ const config = {
 			precompress: false
 		}),
 		paths: {
-			base: dev ? '' : '/sleep'
+			base: '/sleep'
 		},
 		// Ensure this doesn't use $app imports
 		prerender: {
