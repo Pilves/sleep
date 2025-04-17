@@ -6,7 +6,7 @@ import { authToken } from '$lib/stores/authStore.js';
 import { auth } from '$lib/firebase/firebase.client.js';
 
 // Use hardcoded backend URL for now - GitHub Pages deployment issue
-const BACKEND_URL = 'http://157.180.75.112/api';
+const BACKEND_URL = 'http://157.180.75.112';
 
 const api = axios.create({
 	baseURL: browser ? BACKEND_URL : '',
