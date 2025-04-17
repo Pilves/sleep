@@ -1,22 +1,23 @@
 <script>
-  import { page } from '$app/stores';
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
-  import { authUser } from '$lib/stores/authStore';
-  
-  // Redirect to dashboard after a short delay if user is authenticated
-  // otherwise redirect to login page
-  onMount(() => {
-    if (browser) {
-      setTimeout(() => {
-        if ($authUser) {
-          window.location.href = '/dashboard';
-        } else {
-          window.location.href = '/login';
-        }
-      }, 2000);
-    }
-  });
+import { page } from '$app/stores';
+import { onMount } from 'svelte';
+import { browser } from '$app/environment';
+import { authUser } from '$lib/stores/authStore';
+import { goto } from '$app/navigation';  
+
+// Redirect to dashboard after a short delay if user is authenticated
+// otherwise redirect to login page
+onMount(() => {
+  if (browser) {
+    setTimeout(() => {
+      if ($authUser) {
+        goto('/dashboard'); 
+      } else {
+        goto('/login');     
+      }
+    }, 2000);
+  }
+});
 </script>
 
 <div class="error-container">
