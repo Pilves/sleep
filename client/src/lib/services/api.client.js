@@ -6,7 +6,7 @@ import { authToken } from '$lib/stores/authStore.js';
 import { auth } from '$lib/firebase/firebase.client.js';
 
 const api = axios.create({
-	baseURL: browser ? `${import.meta.env.VITE_PUBLIC_API_BASE_URL}/api` : '',
+	baseURL: browser ? `${import.meta.env.VITE_PUBLIC_API_BASE_URL}` : '',
 	headers: {
 		'Content-Type': 'application/json'
 	}
