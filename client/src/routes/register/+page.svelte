@@ -78,6 +78,11 @@
 			return;
 		}
 
+		if (!invitationCode) {
+			$authError = 'Invitation code is required';
+			return;
+		}
+
 		passwordMismatch = false;
 		isSubmitting = true;
 		$authError = null;
@@ -96,24 +101,28 @@
 				// Get ID token for API call
 				const idToken = await user.getIdToken();
 
-				console.log('Registering user with backend...', {
-					email,
-					username,
-					displayName,
-					invitationCode,
-					uid: user.uid
-				});
+				if (import.meta.env.DEV) {
+					console.log('Registering user with backend...', {
+						email,
+						username,
+						displayName,
+						invitationCode,
+						uid: user.uid
+					});
+				}
 					
 				// Create user profile in backend
 				const response = await authApi.register({
 					email,
 					username,
 					displayName,
-					invitationCode: invitationCode || 'DEV123', // Ensure we always have a code
+					invitationCode,
 					uid: user.uid // Pass the Firebase UID to ensure consistency
 				});
 					
-				console.log('Backend registration successful:', response.data);
+				if (import.meta.env.DEV) {
+					console.log('Backend registration successful:', response.data);
+				}
 
 				// Show success message with appropriate message
 				if (response?.data?.needLogin) {
@@ -137,19 +146,23 @@
 				
 				if (!isDuplicateError) {
 					try {
-						console.log("Deleting Firebase Auth user due to backend failure");
+						if (import.meta.env.DEV) {
+							console.log("Deleting Firebase Auth user due to backend failure");
+						}
 						await user.delete();
 					} catch (deleteError) {
 						console.error("Error deleting Firebase user after failed registration:", deleteError);
 					}
-				} else {
+				} else if (import.meta.env.DEV) {
 					console.log("Not deleting Firebase Auth user as it may be a duplicate registration");
 				}
 				// Re-throw backend error with Axios response details
 				throw backendError;
 			}
 		} catch (error) {
-			console.error("Registration failed:", error);
+			if (import.meta.env.DEV) {
+				console.error("Registration failed:", error);
+			}
 			// Handle Axios error responses
 			if (error.response && error.response.data && error.response.data.error) {
 				$authError = error.response.data.error;
@@ -280,7 +293,9 @@
 							placeholder="Enter invitation code"
 							required
 					/>
-					<small class="hint-text">Use 'DEV123' for testing purposes</small>
+					{#if import.meta.env.DEV}
+						<small class="hint-text">Use 'DEV123' for testing purposes</small>
+					{/if}
 				</div>
 
 				<div class="form-group checkbox-group">

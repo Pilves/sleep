@@ -1,4 +1,4 @@
-// src/lib/services.client.js
+// src/lib/services/api.client.js
 import axios from 'axios';
 import { browser } from '$app/environment';
 import { get } from 'svelte/store';
@@ -55,7 +55,9 @@ api.interceptors.response.use(
 					return api(originalRequest);
 				}
 			} catch (refreshError) {
-				console.error('Error refreshing token:', refreshError);
+				if (import.meta.env.DEV) {
+					console.error('Error refreshing token:', refreshError);
+				}
 			}
 		}
 		
@@ -66,7 +68,9 @@ api.interceptors.response.use(
 			const publicPaths = ['/', '/login', '/register', '/forgot-password', '/reset-password'];
 			
 			if (!publicPaths.some(path => currentPath === path || currentPath.startsWith(path))) {
-				console.log('Redirecting to homepage due to authentication failure');
+				if (import.meta.env.DEV) {
+					console.log('Redirecting to homepage due to authentication failure');
+				}
 				window.location.href = '/';
 			}
 		}
@@ -78,8 +82,9 @@ api.interceptors.response.use(
 // Authentication endpoints
 const authApi = {
 	register: (userData) => {
-		// Log the request for debugging
-		console.log('Sending registration API request:', userData);
+		if (import.meta.env.DEV) {
+			console.log('Sending registration API request:', userData);
+		}
 		return api.post('/api/auth/register', userData);
 	},
 	getCurrentUser: () => api.get('/api/auth/me'),

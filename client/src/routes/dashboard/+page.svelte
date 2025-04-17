@@ -34,7 +34,9 @@
 					lastSyncTime = new Date(ouraStatusResponse.data.lastSyncDate);
 				}
 			} catch (ouraStatusError) {
-				console.error('Error checking Oura connection status:', ouraStatusError);
+				if (import.meta.env.DEV) {
+					console.error('Error checking Oura connection status:', ouraStatusError);
+				}
 				// Continue loading the rest of the dashboard even if Oura status check fails
 			}
 			
@@ -57,7 +59,9 @@
 					}
 				}
 			} catch (sleepError) {
-				console.error('Error fetching sleep data:', sleepError);
+				if (import.meta.env.DEV) {
+					console.error('Error fetching sleep data:', sleepError);
+				}
 				// Continue with empty sleep data
 				sleepData = [];
 			}
@@ -66,7 +70,9 @@
 			const competitionsResponse = await competitionApi.getCompetitions();
 			competitions = competitionsResponse.data.competitions || [];
 		} catch (err) {
-			console.error('Error fetching dashboard data:', err);
+			if (import.meta.env.DEV) {
+				console.error('Error fetching dashboard data:', err);
+			}
 			error = 'Failed to load dashboard data. Please try again later.';
 		} finally {
 			loading = false;
@@ -100,7 +106,9 @@
 					}
 				}
 			} catch (error) {
-				console.error('Error refreshing sleep data:', error);
+				if (import.meta.env.DEV) {
+					console.error('Error refreshing sleep data:', error);
+				}
 				// Continue with existing sleep data
 			}
 
@@ -111,7 +119,9 @@
 				syncSuccess = false;
 			}, 3000);
 		} catch (err) {
-			console.error('Error syncing sleep data:', err);
+			if (import.meta.env.DEV) {
+				console.error('Error syncing sleep data:', err);
+			}
 			error = 'Failed to sync sleep data. Please try again later.';
 		} finally {
 			activeSyncRequest = false;
@@ -131,7 +141,9 @@
 			window.location.href = authUrl;
 
 		} catch (err) {
-			console.error('Error starting Oura OAuth flow:', err);
+			if (import.meta.env.DEV) {
+				console.error('Error starting Oura OAuth flow:', err);
+			}
 			error = err.response?.data?.message || 'Failed to start Oura authorization. Please try again.';
 			ouraConnectLoading = false;
 		}
@@ -141,6 +153,13 @@
 		if (!timestamp) return '';
 		const date = new Date(timestamp);
 		return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+	}
+
+	function getTimeOfDay() {
+		const hour = new Date().getHours();
+		if (hour < 12) return 'Good morning';
+		if (hour < 18) return 'Good afternoon';
+		return 'Good evening';
 	}
 
 	function getScoreClass(score) {
@@ -169,7 +188,7 @@
 		</div>
 	{:else}
 		<div class="dashboard-header">
-			<h1>Good morning, {userName}</h1>
+			<h1>{getTimeOfDay()}, {userName}</h1>
 			{#if currentScore}
 				<p class="sleep-message">Your sleep score is {scoreChange > 0 ? 'improving' : scoreChange < 0 ? 'decreasing' : 'stable'}! Keep it up.</p>
 			{:else}

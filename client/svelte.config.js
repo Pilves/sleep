@@ -1,4 +1,4 @@
-import adapterNode from '@sveltejs/adapter-node';
+import adapterStatic from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -8,15 +8,20 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		// Using adapter-node for deployment to services like Render, Heroku, etc.
-		adapter: adapterNode({
+		// Using adapter-static for GitHub Pages deployment
+		adapter: adapterStatic({
 			// default options are shown
-			out: 'build',
-			precompress: false,
-			envPrefix: ''
+			pages: 'build',
+			assets: 'build',
+			fallback: 'index.html',
+			precompress: false
 		}),
 		// Default fallback for SPA - ensures all routes are caught by our app
 		trailingSlash: 'never',
+		// Essential for GitHub Pages deployment
+		paths: {
+			base: process.env.NODE_ENV === 'production' ? '/sleep' : ''
+		},
 		// This helps with catching non-existing routes
 		prerender: {
 			handleHttpError: ({ path, referrer, message }) => {
