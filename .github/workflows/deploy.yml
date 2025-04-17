@@ -4,7 +4,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  
+
 on:
   push:
     branches: [main]
@@ -42,7 +42,7 @@ jobs:
           VITE_PUBLIC_API_BASE_URL: ${{ secrets.VITE_PUBLIC_API_BASE_URL }}
 
       - name: Deploy to GitHub Pages
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./client/build
 
