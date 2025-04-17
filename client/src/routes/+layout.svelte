@@ -6,6 +6,7 @@
 	import Header from '$lib/components/Header.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import './app.css';
+	import { goto } from '$app/navigation'; // Make sure goto is imported
 
 	// Paths that should use the sidebar layout
 	const sidebarPaths = [
@@ -41,24 +42,24 @@
 	$: if (browser && !$authLoading) {
 		if (requiresAuth && !$authUser) {
 			// Redirect to login page if accessing protected route without auth
-			window.location.href = '/login';
+			goto('/login'); // Use goto here!
 		}
 	}
 </script>
 
 <div class="app-container {useSidebar ? 'with-sidebar' : ''}">
 	{#if !useSidebar}
-		<Header />
+		<Header/>
 	{/if}
 
 	{#if useSidebar}
-		<Sidebar />
+		<Sidebar/>
 		<div class="main-content with-sidebar">
-			<slot />
+			<slot/>
 		</div>
 	{:else}
 		<div class="main-content">
-			<slot />
+			<slot/>
 		</div>
 	{/if}
 
@@ -75,7 +76,6 @@
 		</div>
 	</footer>
 </div>
-
 <style>
 	.app-container {
 		display: flex;
@@ -101,7 +101,7 @@
 	.footer {
 		background-color: white;
 		padding: 20px;
-		box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+		box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
 		margin-top: 40px;
 	}
 
