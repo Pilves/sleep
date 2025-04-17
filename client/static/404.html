@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting...</title>
+  <script>
+    // GitHub Pages 404 handler for SPA
+    (function() {
+      // Get the current path (without the '/sleep' prefix)
+      const path = window.location.pathname.replace(/^\/sleep\/?/, '/');
+      // Redirect to the SPA with the correct path
+      window.location.href = '/sleep/?redirect=' + encodeURIComponent(path);
+    })();
+  </script>
+</head>
+<body>
+  <h1>Page not found</h1>
+  <p>Redirecting to home page...</p>
+</body>
+</html>

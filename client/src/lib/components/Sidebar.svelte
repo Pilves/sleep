@@ -2,6 +2,7 @@
     import { page } from '$app/stores';
     import { authUser, isAdmin, userRoles } from '$lib/stores/authStore';
     import { browser } from '$app/environment';
+    import { base } from '$app/paths';
 
     $: currentPath = $page.url.pathname;
     
@@ -14,7 +15,7 @@
 
 <aside class="sidebar">
     <div class="logo-container">
-        <a href="/" class="logo">
+        <a href="{base}/" class="logo">
             <div class="logo-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
                     <circle cx="15" cy="15" r="13" fill="#60A5FA" />
@@ -27,7 +28,7 @@
 
     <nav class="nav-menu">
         <a
-                href="/dashboard"
+                href="{base}/dashboard"
                 class="nav-item {currentPath === '/dashboard' ? 'active' : ''}"
         >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -40,7 +41,7 @@
         </a>
 
         <a
-                href="/competitions"
+                href="{base}/competitions"
                 class="nav-item {currentPath.startsWith('/competitions') ? 'active' : ''}"
         >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -51,7 +52,7 @@
         </a>
 
         <a
-                href="/leaderboard"
+                href="{base}/leaderboard"
                 class="nav-item {currentPath === '/leaderboard' ? 'active' : ''}"
         >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -61,7 +62,7 @@
         </a>
 
         <a
-                href="/sleep-history"
+                href="{base}/sleep-history"
                 class="nav-item {currentPath === '/sleep-history' ? 'active' : ''}"
         >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -72,7 +73,7 @@
         </a>
 
         <a
-                href="/profile"
+                href="{base}/profile"
                 class="nav-item {currentPath === '/profile' ? 'active' : ''}"
         >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -90,19 +91,19 @@
           </div>
 
         <a
-                href="/admin/competitions"
+                href="{base}/admin/competitions"
                 class="nav-item admin-item {currentPath.startsWith('/admin') ? 'active' : ''}"
         >
             Competitions Panel
         </a>
         <a
-        href="/admin/invitations"
+        href="{base}/admin/invitations"
         class="nav-item admin-item {currentPath.startsWith('/admin') ? 'active' : ''}"
         >
             Invitations Management Panel
         </a>
         <a
-        href="/admin/users"
+        href="{base}/admin/users"
         class="nav-item admin-item {currentPath.startsWith('/admin') ? 'active' : ''}"
         >
             Users Panel

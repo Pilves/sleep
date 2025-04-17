@@ -1,22 +1,24 @@
 <script>
-  import { page } from '$app/stores';
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
-  import { authUser } from '$lib/stores/authStore';
-  
-  // Redirect to dashboard after a short delay if user is authenticated
-  // otherwise redirect to login page
-  onMount(() => {
-    if (browser) {
-      setTimeout(() => {
-        if ($authUser) {
-          window.location.href = '/dashboard';
-        } else {
-          window.location.href = '/login';
-        }
-      }, 2000);
-    }
-  });
+import { page } from '$app/stores';
+import { onMount } from 'svelte';
+import { browser } from '$app/environment';
+import { authUser } from '$lib/stores/authStore';
+import { goto } from '$app/navigation';  
+import { base } from '$app/paths';
+
+// Redirect to dashboard after a short delay if user is authenticated
+// otherwise redirect to login page
+onMount(() => {
+  if (browser) {
+    setTimeout(() => {
+      if ($authUser) {
+        goto(`${base}/dashboard`); 
+      } else {
+        goto(`${base}/login`);     
+      }
+    }, 2000);
+  }
+});
 </script>
 
 <div class="error-container">
@@ -26,8 +28,8 @@
     <p>You'll be redirected {$authUser ? 'to the dashboard' : 'to login'} in a few seconds...</p>
     
     <div class="buttons">
-      <a href="/dashboard" class="btn primary">Go to Dashboard</a>
-      <a href="/" class="btn secondary">Go to Home</a>
+      <a href="{base}/dashboard" class="btn primary">Go to Dashboard</a>
+      <a href="{base}/" class="btn secondary">Go to Home</a>
     </div>
   </div>
 </div>

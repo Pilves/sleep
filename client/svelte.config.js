@@ -11,11 +11,11 @@ const config = {
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
-			fallback: 'index.html',
+			fallback: 'index.html',  // Critical for SPA on GitHub Pages
 			precompress: false
 		}),
 		paths: {
-			base: dev ? '' : '/sleep'
+			base: '/sleep'  // The base path for GitHub Pages (username.github.io/sleep)
 		},
 		// Ensure this doesn't use $app imports
 		prerender: {

@@ -3,11 +3,12 @@
 	import { auth } from '$lib/firebase/firebase.client.js';
 	import { signOut } from 'firebase/auth';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	async function handleLogout() {
 		try {
 			await signOut(auth);
-			goto('/login');
+			goto(`${base}/login`);
 		} catch (err) {
 			console.error('Logout failed:', err);
 		}
@@ -17,7 +18,7 @@
 <header class="header">
 	<div class="container">
 		<div class="logo-container">
-			<a href="/" class="logo">
+			<a href="{base}/" class="logo">
 				<div class="logo-icon">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
 						<circle cx="15" cy="15" r="13" fill="#60A5FA" />
@@ -31,18 +32,18 @@
 		<nav class="nav">
 			{#if $authUser && !$authLoading}
 				<div class="nav-items">
-					<a href="/dashboard" class="nav-item">Dashboard</a>
-					<a href="/competitions" class="nav-item">Competitions</a>
-					<a href="/leaderboard" class="nav-item">Leaderboard</a>
-					<a href="/sleep-history" class="nav-item">Sleep Data</a>
+					<a href="{base}/dashboard" class="nav-item">Dashboard</a>
+					<a href="{base}/competitions" class="nav-item">Competitions</a>
+					<a href="{base}/leaderboard" class="nav-item">Leaderboard</a>
+					<a href="{base}/sleep-history" class="nav-item">Sleep Data</a>
 
 					{#if $isAdmin}
 						<div class="dropdown">
 							<button class="nav-item dropdown-toggle">Admin <span class="caret">▼</span></button>
 							<div class="dropdown-content">
-								<a href="/admin/competitions">Competitions</a>
-								<a href="/admin/users">Users</a>
-								<a href="/admin/invitations">Invitations</a>
+								<a href="{base}/admin/competitions">Competitions</a>
+								<a href="{base}/admin/users">Users</a>
+								<a href="{base}/admin/invitations">Invitations</a>
 							</div>
 						</div>
 					{/if}
@@ -61,8 +62,8 @@
 								<div class="user-email">{$authUser.email}</div>
 							</div>
 							<div class="dropdown-divider"></div>
-							<a href="/profile">Profile</a>
-							<a href="/settings">Settings</a>
+							<a href="{base}/profile">Profile</a>
+							<a href="{base}/settings">Settings</a>
 							<div class="dropdown-divider"></div>
 							<button class="logout-button" on:click={handleLogout}>Logout</button>
 						</div>
@@ -70,8 +71,8 @@
 				</div>
 			{:else if !$authLoading}
 				<div class="auth-buttons">
-					<a href="/login" class="btn btn-text">Login</a>
-					<a href="/register" class="btn btn-primary">Register</a>
+					<a href="{base}/login" class="btn btn-text">Login</a>
+					<a href="{base}/register" class="btn btn-primary">Register</a>
 				</div>
 			{/if}
 		</nav>

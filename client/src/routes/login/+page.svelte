@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import { auth } from '$lib/firebase/firebase.client.js';
 	import { signInWithEmailAndPassword } from 'firebase/auth';
+	import { base } from '$app/paths';
 
 	let email = '';
 	let password = '';
@@ -14,7 +15,7 @@
 	onMount(() => {
 		// If user is already logged in, redirect to dashboard
 		if ($authUser) {
-			goto('/dashboard');
+			goto(`${base}/dashboard`);
 		}
 	});
 
@@ -37,7 +38,7 @@
 			await authApi.getCurrentUser();
 			
 			// Redirect to dashboard after successful login
-			goto('/dashboard');
+			goto(`${base}/dashboard`);
 		} catch (err) {
 			console.error("Login failed", err);
 			console.error("Error details:", err.code, err.message, err.stack);
@@ -96,7 +97,7 @@
 						<input type="checkbox" bind:checked={rememberMe}/>
 						<span>Remember me</span>
 					</label>
-					<a href="/forgot-password" class="forgot-link">Forgot password?</a>
+					<a href="{base}/forgot-password" class="forgot-link">Forgot password?</a>
 				</div>
 
 				{#if $authError}
@@ -111,7 +112,7 @@
 			</form>
 
 			<div class="form-footer">
-				<p>Don't have an account? <a href="/register">Register</a></p>
+				<p>Don't have an account? <a href="{base}/register">Register</a></p>
 			</div>
 		{/if}
 	</div>
