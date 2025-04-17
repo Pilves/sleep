@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import {dev} from "$app/environment";
+
+const dev = process.env.NODE_ENV === 'development';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -16,6 +17,7 @@ const config = {
 		paths: {
 			base: dev ? '' : '/sleep'
 		},
+		// Ensure this doesn't use $app imports
 		prerender: {
 			handleHttpError: ({ path, referrer, message }) => {
 				if (path.startsWith('/images/') || path.endsWith('.png') || path.endsWith('.jpg')) {

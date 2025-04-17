@@ -29,10 +29,12 @@ jobs:
       - name: Install dependencies
         run: cd client && pnpm install --no-frozen-lockfile
 
+      - name: SvelteKit Sync
+        run: cd client && pnpm svelte-kit sync
+
       - name: Build
         run: cd client && pnpm run build
         env:
-          # Add any environment variables your build needs
           VITE_PUBLIC_FIREBASE_API_KEY: ${{ secrets.VITE_PUBLIC_FIREBASE_API_KEY }}
           VITE_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_PUBLIC_FIREBASE_AUTH_DOMAIN }}
           VITE_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.VITE_PUBLIC_FIREBASE_PROJECT_ID }}
@@ -42,7 +44,7 @@ jobs:
           VITE_PUBLIC_API_BASE_URL: ${{ secrets.VITE_PUBLIC_API_BASE_URL }}
 
       - name: Deploy to GitHub Pages
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v2
         with:
           path: ./client/build
 
