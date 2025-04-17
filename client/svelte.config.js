@@ -15,8 +15,7 @@ const config = {
 			precompress: false,
 			envPrefix: ''
 		}),
-		// Default fallback for SPA - ensures all routes are caught by our app
-		trailingSlash: 'never',
+		// trailingSlash: 'never',
 		// This helps with catching non-existing routes
 		prerender: {
 			handleHttpError: ({ path, referrer, message }) => {
@@ -24,10 +23,10 @@ const config = {
 				if (path.startsWith('/images/') || path.endsWith('.png') || path.endsWith('.jpg')) {
 					return;
 				}
-				
+
 				// Log for debugging
 				console.warn(`Warning: ${message} at ${path}${referrer ? ` (referrer: ${referrer})` : ''}`);
-				
+
 				// Continue without error
 				return;
 			}
