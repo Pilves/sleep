@@ -5,8 +5,11 @@ import { get } from 'svelte/store';
 import { authToken } from '$lib/stores/authStore.js';
 import { auth } from '$lib/firebase/firebase.client.js';
 
+// Use hardcoded backend URL for now - GitHub Pages deployment issue
+const BACKEND_URL = 'http://157.180.75.112/api';
+
 const api = axios.create({
-	baseURL: browser ? `${import.meta.env.VITE_PUBLIC_API_BASE_URL}` : '',
+	baseURL: browser ? BACKEND_URL : '',
 	headers: {
 		'Content-Type': 'application/json'
 	}
