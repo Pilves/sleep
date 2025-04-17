@@ -1,6 +1,7 @@
 // src/lib/stores/authStore.js
 import { writable, derived } from 'svelte/store';
 import { browser } from '$app/environment';
+import { goto } from '$app/navigation';
 import {
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
@@ -90,7 +91,7 @@ export function requireAuth(returnTo = '/login') {
 	if (browser && !authLoading.get()) {
 		if (!auth.currentUser) {
 			// Redirect to login page if not authenticated
-			window.location.href = returnTo;
+			goto(returnTo);
 			return false;
 		}
 		return true;
