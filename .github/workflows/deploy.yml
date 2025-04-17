@@ -26,39 +26,19 @@ jobs:
         with:
           node-version: '20'
       
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-      
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
+      - name: Create Rollup resolver file
         run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          cd client
+          mkdir -p node_modules/rollup/dist
+          echo 'export default function() { return { name: "noop" }; }' > node_modules/rollup/dist/native.js
       
       - name: Install dependencies
         run: |
           cd client
-          pnpm install --no-frozen-lockfile
-      
-      - name: Downgrade Rollup
-        run: |
-          cd client
-          pnpm remove rollup
-          pnpm add rollup@3.29.4
+          npm install
       
       - name: Build
-        run: cd client && pnpm run build
+        run: cd client && npm run build
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
