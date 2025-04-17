@@ -147,7 +147,7 @@
   </section>
 </div>
 
-<style>
+<style lang="css">
   .landing-page {
     color: #333;
     font-family: 'Inter', sans-serif;
