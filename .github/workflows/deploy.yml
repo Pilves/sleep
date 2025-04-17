@@ -8,9 +8,15 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    # Add environment and configure permissions properly
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       pages: write
       id-token: write
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -43,11 +49,17 @@ jobs:
           VITE_PUBLIC_FIREBASE_APP_ID: ${{ secrets.VITE_PUBLIC_FIREBASE_APP_ID }}
           VITE_PUBLIC_API_BASE_URL: ${{ secrets.VITE_PUBLIC_API_BASE_URL }}
 
-      - name: Deploy to GitHub Pages
+      # Set up Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      # Upload artifact
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./client/build
 
+      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
