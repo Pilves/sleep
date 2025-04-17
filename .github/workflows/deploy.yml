@@ -5,13 +5,11 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -30,11 +28,16 @@ jobs:
           cache: 'npm'
           cache-dependency-path: client/package-lock.json
 
-      - name: Install dependencies
+      - name: Clean install dependencies
         run: |
           cd client
-          # Use npm install instead of npm ci to handle platform-specific dependencies
-          npm install --no-optional
+          rm -rf node_modules package-lock.json
+          npm install
+
+      - name: Install platform-specific Rollup
+        run: |
+          cd client
+          npm install @rollup/rollup-linux-x64-gnu
 
       - name: Build
         run: cd client && npm run build
