@@ -23,12 +23,12 @@
 
 		try {
 			loading = true;
-			
+
 			// Check if Oura is connected
 			try {
 				const ouraStatusResponse = await ouraApi.getOuraConnectionStatus();
 				ouraConnected = ouraStatusResponse.data.connected;
-				
+
 				// Get last sync time if available
 				if (ouraStatusResponse.data.lastSyncDate) {
 					lastSyncTime = new Date(ouraStatusResponse.data.lastSyncDate);
@@ -39,12 +39,12 @@
 				}
 				// Continue loading the rest of the dashboard even if Oura status check fails
 			}
-			
+
 			// Fetch user's sleep data (recent 7 days)
 			try {
 				const sleepResponse = await sleepApi.getSleepData({ days: 7 });
 				sleepData = sleepResponse.data.sleepData || [];
-				
+
 				if (sleepData.length > 0) {
 					currentScore = sleepData[0].ouraScore;
 
@@ -52,7 +52,7 @@
 					if (sleepData.length > 1) {
 						scoreChange = currentScore - sleepData[1].ouraScore;
 					}
-					
+
 					// If we got sleep data but didn't get a lastSyncTime from status endpoint
 					if (!lastSyncTime && sleepData[0].date) {
 						lastSyncTime = new Date(sleepData[0].date);
@@ -87,7 +87,7 @@
 
 		try {
 			const syncResponse = await sleepApi.syncSleepData();
-			
+
 			// Update last sync time
 			if (syncResponse.data.recordsProcessed > 0) {
 				lastSyncTime = new Date();
@@ -97,7 +97,7 @@
 			try {
 				const sleepResponse = await sleepApi.getSleepData({ days: 7 });
 				sleepData = sleepResponse.data.sleepData || [];
-				
+
 				if (sleepData.length > 0) {
 					currentScore = sleepData[0].ouraScore;
 
@@ -127,7 +127,7 @@
 			activeSyncRequest = false;
 		}
 	}
-	
+
 	async function connectOura() {
 		try {
 			ouraConnectLoading = true;
@@ -136,7 +136,7 @@
 			// Get OAuth URL
 			const response = await ouraApi.getOuraAuthUrl();
 			const authUrl = response.data.authorizationUrl;
-			
+
 			// Redirect to Oura authorization page
 			window.location.href = authUrl;
 
@@ -195,7 +195,7 @@
 				<p class="sleep-message">Connect your Oura Ring to start tracking your sleep.</p>
 			{/if}
 		</div>
-		
+
 		{#if !ouraConnected}
 			<div class="oura-banner">
 				<div class="oura-banner-content">
@@ -215,8 +215,8 @@
 						<h3>Connect your Oura Ring to participate in competitions</h3>
 						<p>Track your sleep and compete with others for better sleep habits!</p>
 					</div>
-					<button 
-						class="btn primary oura-connect-btn" 
+					<button
+						class="btn primary oura-connect-btn"
 						on:click={connectOura}
 						disabled={ouraConnectLoading}
 					>
@@ -249,8 +249,8 @@
 							<p>You haven't recorded any sleep data yet</p>
 						{/if}
 						{#if !ouraConnected}
-							<button 
-								class="btn primary oura-connect-btn" 
+							<button
+								class="btn primary oura-connect-btn"
 								on:click={connectOura}
 								disabled={ouraConnectLoading}
 								style="margin-top: 15px;"
@@ -342,7 +342,7 @@
 							<path d="M4 15h2M4 15v3a2 2 0 0 0 2 2h2M4 15V5"/>
 						</svg>
 						<p>You're not participating in any competitions</p>
-						<a href="/competitions" class="btn primary">Join a Competition</a>
+						<a href="sleep/competitions" class="btn primary">Join a Competition</a>
 					</div>
 				{:else}
 					<ul class="competition-list">
@@ -357,11 +357,11 @@
 										<p class="competition-rank">Your rank: <span class="rank">{competition.currentRank}</span> of {competition.participants?.length || 0}</p>
 									{/if}
 								</div>
-								<a href="/competitions/{competition.id}" class="view-link">View</a>
+								<a href="sleep/competitions/{competition.id}" class="view-link">View</a>
 							</li>
 						{/each}
 					</ul>
-					<a href="/competitions" class="view-all">View All Competitions</a>
+					<a href="sleep/competitions" class="view-all">View All Competitions</a>
 				{/if}
 			</div>
 
@@ -409,7 +409,7 @@
 						</div>
 					</div>
 
-					<a href="/sleep-history" class="view-all">View Sleep History</a>
+					<a href="sleep/sleep-history" class="view-all">View Sleep History</a>
 				{/if}
 			</div>
 
@@ -673,7 +673,7 @@
 		color: #38a169;
 		font-size: 0.9rem;
 	}
-	
+
 	.last-sync, .sync-time {
 		margin-left: 15px;
 		color: #718096;
@@ -891,7 +891,7 @@
 		font-size: 0.9rem;
 		color: #666;
 	}
-	
+
 	.oura-banner {
 		background: linear-gradient(135deg, #60A5FA, #7C3AED);
 		border-radius: 12px;
@@ -899,13 +899,13 @@
 		padding: 20px;
 		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 	}
-	
+
 	.oura-banner-content {
 		display: flex;
 		align-items: center;
 		gap: 20px;
 	}
-	
+
 	.oura-icon {
 		background-color: rgba(255, 255, 255, 0.2);
 		border-radius: 50%;
@@ -916,27 +916,27 @@
 		justify-content: center;
 		flex-shrink: 0;
 	}
-	
+
 	.oura-icon svg {
 		color: white;
 	}
-	
+
 	.oura-banner-text {
 		flex: 1;
 	}
-	
+
 	.oura-banner-text h3 {
 		color: white;
 		margin: 0 0 5px 0;
 		font-size: 1.2rem;
 	}
-	
+
 	.oura-banner-text p {
 		color: rgba(255, 255, 255, 0.9);
 		margin: 0;
 		font-size: 0.95rem;
 	}
-	
+
 	.oura-connect-btn {
 		display: flex;
 		align-items: center;
@@ -951,12 +951,12 @@
 		transition: all 0.3s;
 		font-size: 0.95rem;
 	}
-	
+
 	.oura-connect-btn:hover:not(:disabled) {
 		transform: translateY(-2px);
 		box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
 	}
-	
+
 	.oura-connect-btn:disabled {
 		opacity: 0.7;
 		cursor: not-allowed;
@@ -981,7 +981,7 @@
 			grid-template-columns: 1fr;
 			gap: 15px;
 		}
-		
+
 		.oura-banner-content {
 			flex-direction: column;
 			text-align: center;
