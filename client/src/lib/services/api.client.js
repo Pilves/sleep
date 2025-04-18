@@ -12,7 +12,8 @@ const api = axios.create({
 	baseURL: browser ? BACKEND_URL : '',
 	headers: {
 		'Content-Type': 'application/json'
-	}
+	},
+	withCredentials: true
 });
 
 // Add request interceptor to include auth token
