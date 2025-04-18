@@ -5,7 +5,7 @@ import { get } from 'svelte/store';
 import { authToken } from '$lib/stores/authStore.js';
 import { auth } from '$lib/firebase/firebase.client.js';
 
-// Use hardcoded backend URL for now - GitHub Pages deployment issue
+// Use the correct backend URL based on domain
 const BACKEND_URL = 'https://api.chaidla.ee';
 
 const api = axios.create({
