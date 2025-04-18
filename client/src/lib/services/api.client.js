@@ -8,17 +8,11 @@ import { auth } from '$lib/firebase/firebase.client.js';
 // Use the correct backend URL based on domain
 const BACKEND_URL = 'https://api.chaidla.ee';
 
-// CORS proxy for fallback if needed
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-const useCorsProxy = false; // Set to true only if direct calls fail
-
 const api = axios.create({
-	baseURL: browser ? (useCorsProxy ? CORS_PROXY + BACKEND_URL : BACKEND_URL) : '',
+	baseURL: browser ? BACKEND_URL : '',
 	headers: {
-		'Content-Type': 'application/json',
-		'X-Requested-With': 'XMLHttpRequest'
-	},
-	withCredentials: true
+		'Content-Type': 'application/json'
+	}
 });
 
 // Add request interceptor to include auth token
