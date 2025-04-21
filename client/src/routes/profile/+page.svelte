@@ -108,9 +108,9 @@
 			successMessage = null;
 
 			// Get OAuth URL
-			const response = await sleepApi.getOuraAuthUrl();
+			const response = await userApi.getOuraAuthUrl();
 			const authUrl = response.data.authorizationUrl;
-			
+
 			// Redirect to Oura authorization page
 			window.location.href = authUrl;
 
@@ -145,7 +145,7 @@
 			syncing = false;
 		}
 	}
-	
+
 	async function disconnectOura() {
 		try {
 			loading = true;
@@ -153,8 +153,8 @@
 			successMessage = null;
 
 			// Call the disconnect API
-			await sleepApi.disconnectOura();
-			
+			await userApi.disconnectOuraIntegration();
+
 			// Update local state
 			ouraConnected = false;
 			ouraLastSync = null;
@@ -228,7 +228,7 @@
 				{error}
 			</div>
 		{/if}
-		
+
 		{#if showOuraPrompt && !ouraConnected}
 			<div class="oura-prompt-banner">
 				<div class="oura-prompt-content">
@@ -472,10 +472,10 @@
 						<div class="last-sync">
 							<p>Last sync: {formatDate(ouraLastSync)}</p>
 						</div>
-						
-						<button 
-							class="btn secondary disconnect-btn" 
-							on:click={disconnectOura} 
+
+						<button
+							class="btn secondary disconnect-btn"
+							on:click={disconnectOura}
 							disabled={loading}
 							style="margin-top: 15px;"
 						>
@@ -501,9 +501,9 @@
 						</div>
 					</div>
 
-					<button 
-						class="btn primary oauth-btn" 
-						on:click={connectOura} 
+					<button
+						class="btn primary oauth-btn"
+						on:click={connectOura}
 						disabled={loading}
 						style="width: 100%; margin-top: 15px; margin-bottom: 10px;"
 					>
@@ -694,7 +694,7 @@
 		margin-right: 10px;
 		flex-shrink: 0;
 	}
-	
+
 	.oura-prompt-banner {
 		display: flex;
 		align-items: center;
@@ -705,29 +705,29 @@
 		border-radius: 8px;
 		margin-bottom: 25px;
 	}
-	
+
 	.oura-prompt-content {
 		display: flex;
 		align-items: center;
 		gap: 15px;
 	}
-	
+
 	.oura-prompt-content svg {
 		color: #3182ce;
 		flex-shrink: 0;
 	}
-	
+
 	.oura-prompt-content h3 {
 		margin: 0 0 5px 0;
 		color: #2c5282;
 	}
-	
+
 	.oura-prompt-content p {
 		margin: 0;
 		color: #4a5568;
 		font-size: 0.95rem;
 	}
-	
+
 	.btn-close {
 		background: none;
 		border: none;
@@ -824,7 +824,7 @@
 		opacity: 0.7;
 		cursor: not-allowed;
 	}
-	
+
 	.btn-icon {
 		background: none;
 		border: none;
@@ -837,18 +837,18 @@
 		justify-content: center;
 		transition: all 0.2s;
 	}
-	
+
 	.btn-icon:hover {
 		background-color: #f0f0f0;
 		color: #4A5568;
 	}
-	
+
 	.section-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
-	
+
 	.section-header h3 {
 		margin-bottom: 0;
 	}
@@ -868,17 +868,17 @@
 		border-bottom: none;
 		padding-bottom: 0;
 	}
-	
+
 	.empty-about {
 		text-align: center;
 		padding: 25px 0;
 	}
-	
+
 	.empty-message {
 		color: #A0AEC0;
 		margin-bottom: 15px;
 	}
-	
+
 	.detail-value.empty {
 		color: #A0AEC0;
 		font-style: italic;

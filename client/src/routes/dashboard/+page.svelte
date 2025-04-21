@@ -26,7 +26,7 @@
 
 			// Check if Oura is connected
 			try {
-				const ouraStatusResponse = await sleepApi.getOuraConnectionStatus();
+				const ouraStatusResponse = await userApi.getOuraConnectionStatus();
 				ouraConnected = ouraStatusResponse.data.connected;
 
 				// Get last sync time if available
@@ -140,7 +140,7 @@
 			error = null;
 
 			// Get OAuth URL
-			const response = await sleepApi.getOuraAuthUrl();
+			const response = await userApi.getOuraAuthUrl();
 			const authUrl = response.data.authorizationUrl;
 
 			// Redirect to Oura authorization page
