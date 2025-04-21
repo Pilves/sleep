@@ -46,11 +46,14 @@
 				sleepData = sleepResponse.data.sleepData || [];
 
 				if (sleepData.length > 0) {
-					currentScore = sleepData[0].ouraScore;
+					// Get most recent data (last item in the array)
+					const mostRecentData = sleepData[sleepData.length - 1];
+					currentScore = mostRecentData.ouraScore;
 
 					// Calculate score change (current vs yesterday)
 					if (sleepData.length > 1) {
-						scoreChange = currentScore - sleepData[1].ouraScore;
+						const previousData = sleepData[sleepData.length - 2];
+						scoreChange = currentScore - previousData.ouraScore;
 					}
 
 					// If we got sleep data but didn't get a lastSyncTime from status endpoint
@@ -99,10 +102,13 @@
 				sleepData = sleepResponse.data.sleepData || [];
 
 				if (sleepData.length > 0) {
-					currentScore = sleepData[0].ouraScore;
+					// Get most recent data (last item in the array)
+					const mostRecentData = sleepData[sleepData.length - 1];
+					currentScore = mostRecentData.ouraScore;
 
 					if (sleepData.length > 1) {
-						scoreChange = currentScore - sleepData[1].ouraScore;
+						const previousData = sleepData[sleepData.length - 2];
+						scoreChange = currentScore - previousData.ouraScore;
 					}
 				}
 			} catch (error) {
@@ -278,31 +284,31 @@
 						</div>
 						<div class="score-label">
 							<h3>Latest Sleep Score</h3>
-							<p>{sleepData[0]?.date ? formatDate(sleepData[0].date) : ''}</p>
+							<p>{sleepData[sleepData.length-1]?.date ? formatDate(sleepData[sleepData.length-1].date) : ''}</p>
 
-							{#if sleepData[0]?.metrics}
+							{#if sleepData[sleepData.length-1]?.metrics}
 								<div class="sleep-metrics">
 									<div class="metric">
-										{#if sleepData[0].metrics.totalSleepTime > 500}
+										{#if sleepData[sleepData.length-1].metrics.totalSleepTime > 500}
 											<!-- Assuming it's in seconds, convert to h:m format -->
-											<span class="metric-value">{Math.floor(sleepData[0].metrics.totalSleepTime / 3600)}h {Math.floor((sleepData[0].metrics.totalSleepTime % 3600) / 60)}m</span>
+											<span class="metric-value">{Math.floor(sleepData[sleepData.length-1].metrics.totalSleepTime / 3600)}h {Math.floor((sleepData[sleepData.length-1].metrics.totalSleepTime % 3600) / 60)}m</span>
 										{:else}
 											<!-- Assuming it's already in minutes -->
-											<span class="metric-value">{Math.floor(sleepData[0].metrics.totalSleepTime / 60)}h {sleepData[0].metrics.totalSleepTime % 60}m</span>
+											<span class="metric-value">{Math.floor(sleepData[sleepData.length-1].metrics.totalSleepTime / 60)}h {sleepData[sleepData.length-1].metrics.totalSleepTime % 60}m</span>
 										{/if}
 										<span class="metric-label">Sleep Duration</span>
 									</div>
 									<div class="metric">
-										<span class="metric-value">{sleepData[0].metrics.efficiency || 0}%</span>
+										<span class="metric-value">{sleepData[sleepData.length-1].metrics.efficiency || 0}%</span>
 										<span class="metric-label">Efficiency</span>
 									</div>
 									<div class="metric">
-										{#if sleepData[0].metrics.deepSleep > 500}
+										{#if sleepData[sleepData.length-1].metrics.deepSleep > 500}
 											<!-- Assuming it's in seconds, convert to minutes -->
-											<span class="metric-value">{Math.round(sleepData[0].metrics.deepSleep / 60)}m</span>
+											<span class="metric-value">{Math.round(sleepData[sleepData.length-1].metrics.deepSleep / 60)}m</span>
 										{:else}
 											<!-- Assuming it's already in minutes -->
-											<span class="metric-value">{sleepData[0].metrics.deepSleep || 0}m</span>
+											<span class="metric-value">{sleepData[sleepData.length-1].metrics.deepSleep || 0}m</span>
 										{/if}
 										<span class="metric-label">Deep Sleep</span>
 									</div>

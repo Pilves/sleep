@@ -301,7 +301,7 @@
 					<div class="rem-column">REM Sleep</div>
 				</div>
 
-				{#each sleepData as day}
+				{#each [...sleepData].reverse() as day}
 					<div class="table-row">
 						<div class="date-column">{formatDate(day.date)}</div>
 						<div class="score-column">
