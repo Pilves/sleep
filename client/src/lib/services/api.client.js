@@ -83,7 +83,7 @@ api.interceptors.response.use(
 	}
 );
 
-// Authentication endpoints - Based on API_ENDPOINTS.md
+// Authentication endpoints
 const authApi = {
 	// Register a new user with invitation code
 	register: (userData) => {
@@ -92,59 +92,54 @@ const authApi = {
 		}
 		return api.post('/api/auth/register', userData);
 	},
-	// Login with email/password
-	login: (credentials) => api.post('/api/auth/login', credentials),
-	// Refresh authentication token
-	refreshToken: () => api.post('/api/auth/refresh'),
-	// Request password reset
-	resetPassword: (email) => api.post('/api/auth/reset-password', { email }),
 	// Get current user profile
-	getCurrentUser: () => api.get('/api/auth/me')
+	getCurrentUser: () => api.get('/api/auth/me'),
+	// Request password reset
+	resetPassword: (email) => api.post('/api/auth/reset-password', { email })
 };
 
-// User Management endpoints - Based on API_ENDPOINTS.md
+// User Management endpoints
 const userApi = {
 	// Get current user profile
 	getProfile: () => api.get('/api/users/profile'),
 	// Update user profile
 	updateProfile: (profileData) => api.put('/api/users/profile', profileData),
+	// Get notification preferences
+	getNotificationPreferences: () => api.get('/api/users/notifications'),
 	// Update notification preferences
-	updateNotificationPreferences: (preferences) => api.put('/api/users/notifications/preferences', preferences),
-	
-	// Admin-only endpoints - From NEEDED_API_ENDPOINTS.md
-	getAllUsers: (params) => api.get('/api/users', { params }),
+	updateNotificationPreferences: (preferences) => api.put('/api/users/notifications', preferences),
+
+	// Oura OAuth integration endpoints
+	getOuraAuthUrl: () => api.get('/api/users/oura/authorize'),
+	getOuraConnectionStatus: () => api.get('/api/users/oura/status'),
+	disconnectOuraIntegration: () => api.post('/api/users/oura/disconnect'),
+
+	// Admin-only endpoints
+	getAllUsers: () => api.get('/api/users'),
 	updateUserStatus: (userId, status) => api.put(`/api/users/${userId}/status`, { status }),
 	addAdminRole: (userId) => api.post(`/api/users/${userId}/roles/admin`),
 	removeAdminRole: (userId) => api.delete(`/api/users/${userId}/roles/admin`)
 };
 
-// Sleep Data endpoints - Based on API_ENDPOINTS.md
+// Sleep Data endpoints
 const sleepApi = {
 	// Get sleep data for specific date
-	getSleepByDate: (date) => api.get(`/api/sleep/daily/${date}`),
+	getSleepByDate: (date) => api.get(`/api/sleep/data/${date}`),
 	// Get sleep data for date range
-	getSleepByRange: (params) => api.get('/api/sleep/range', { params }),
+	getSleepByRange: (params) => api.get('/api/sleep/data', { params }),
 	// Get sleep summary statistics
 	getSleepSummary: () => api.get('/api/sleep/summary'),
 	// Add notes to sleep data
-	addSleepNote: (date, note) => api.post(`/api/sleep/daily/${date}/notes`, { note }),
-	// Connect Oura Ring account
-	connectOura: (token) => api.post('/api/sleep/oura/connect', { token }),
+	addSleepNote: (date, noteData) => api.post(`/api/sleep/data/${date}/note`, noteData),
 	// Manually trigger Oura data sync
-	syncOuraData: () => api.post('/api/sleep/oura/sync'),
-	// Disconnect Oura Ring account
-	disconnectOura: () => api.post('/api/sleep/oura/disconnect'),
-	
-	// Oura methods moved from ouraApi to sleepApi 
-	getOuraAuthUrl: () => api.get('/api/sleep/oura/authorize'),
-	getOuraConnectionStatus: () => api.get('/api/sleep/oura/status'),
-	
+	syncOuraData: () => api.post('/api/sleep/sync'),
+
 	// Legacy methods for backward compatibility
-	getSleepData: (params) => api.get('/api/sleep/range', { params }),
-	syncSleepData: () => api.post('/api/sleep/oura/sync')
+	getSleepData: (params) => api.get('/api/sleep/data', { params }),
+	syncSleepData: () => api.post('/api/sleep/sync')
 };
 
-// Competitions endpoints - Based on API_ENDPOINTS.md
+// Competitions endpoints
 const competitionApi = {
 	// Get all competitions (filter by status with ?status=)
 	getCompetitions: (params) => api.get('/api/competitions', { params }),
@@ -160,46 +155,47 @@ const competitionApi = {
 	getUserCompetitions: () => api.get('/api/competitions/user/me'),
 	// Update competition status (participants only)
 	updateCompetitionStatus: (competitionId, status) => api.patch(`/api/competitions/${competitionId}/status`, { status }),
-	
+
 	// Admin-only endpoints
 	createCompetition: (competitionData) => api.post('/api/competitions', competitionData),
 	updateCompetition: (competitionId, competitionData) => api.put(`/api/competitions/${competitionId}`, competitionData),
-	updateWinners: (competitionId, winnersData) => api.put(`/api/competitions/${competitionId}/winners`, winnersData),
-	deleteCompetition: (competitionId) => api.delete(`/api/competitions/${competitionId}`)
+	updateWinners: (competitionId, winnersData) => api.put(`/api/competitions/${competitionId}/winners`, winnersData)
+	// Note: deleteCompetition endpoint doesn't exist in the backend code
 };
 
-// Admin Invitations endpoints - Based on API_ENDPOINTS.md
+// Invitations endpoints
 const invitationApi = {
 	// Create new invitation code
 	createInvitation: (invitationData) => api.post('/api/invitations', invitationData),
 	// List all invitation codes
-	getInvitations: (params) => api.get('/api/invitations', { params }),
-	// Revoke invitation (using DELETE method as per API_ENDPOINTS.md)
+	getInvitations: () => api.get('/api/invitations'),
+	// Revoke invitation
 	revokeInvitation: (invitationId) => api.delete(`/api/invitations/${invitationId}`),
-	
-	// Additional methods needed but not in API_ENDPOINTS.md
+	// Validate invitation code
 	validateInvitation: (code) => api.get(`/api/invitations/validate/${code}`),
-	acceptInvitation: (data) => api.post('/api/invitations/accept', data),
-	resendInvitation: (invitationId) => api.post(`/api/invitations/${invitationId}/resend`)
+	// Accept invitation
+	acceptInvitation: (data) => api.post('/api/invitations/accept', data)
+	// Note: resendInvitation endpoint doesn't exist in the backend code
 };
 
-// Notifications endpoints - Based on API_ENDPOINTS.md
+// Notifications endpoints
 const notificationApi = {
 	// Get user notifications
-	getNotifications: () => api.get('/api/notifications'),
+	getNotifications: (params) => api.get('/api/notifications', { params }),
 	// Mark notification as read
 	markAsRead: (notificationId) => api.put(`/api/notifications/${notificationId}/read`),
 	// Mark all notifications as read
 	markAllAsRead: () => api.put('/api/notifications/read-all'),
-	
-	// Additional endpoints needed but not in API_ENDPOINTS.md
+	// Get unread notification count
 	getUnreadCount: () => api.get('/api/notifications/unread-count'),
+	// Delete a notification
 	deleteNotification: (notificationId) => api.delete(`/api/notifications/${notificationId}`),
+	// Admin: Create notification for a user
 	createAdminNotification: (notification) => api.post('/api/notifications/admin/create', notification),
-	createBulkNotifications: (notifications) => api.post('/api/notifications/admin/bulk-create', { notifications })
+	// Admin: Create notifications for multiple users
+	createBulkNotifications: (notification) => api.post('/api/notifications/admin/bulk-create', notification)
 };
 
-// Remove ouraApi export as functionality is now in sleepApi
 export {
 	authApi,
 	userApi,
