@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { authUser } from '$lib/stores/authStore';
-	import { sleepApi, competitionApi, ouraApi } from '$lib/services/api.client.js';
+	import { sleepApi, competitionApi } from '$lib/services/api.client.js';
 
 	let sleepData = [];
 	let competitions = [];
@@ -26,7 +26,7 @@
 
 			// Check if Oura is connected
 			try {
-				const ouraStatusResponse = await ouraApi.getOuraConnectionStatus();
+				const ouraStatusResponse = await sleepApi.getOuraConnectionStatus();
 				ouraConnected = ouraStatusResponse.data.connected;
 
 				// Get last sync time if available
@@ -140,7 +140,7 @@
 			error = null;
 
 			// Get OAuth URL
-			const response = await ouraApi.getOuraAuthUrl();
+			const response = await sleepApi.getOuraAuthUrl();
 			const authUrl = response.data.authorizationUrl;
 
 			// Redirect to Oura authorization page

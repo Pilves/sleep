@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { authUser } from '$lib/stores/authStore';
 	import { page } from '$app/stores';
-	import { userApi, ouraApi, sleepApi } from '$lib/services/api.client.js';
+	import { userApi, sleepApi } from '$lib/services/api.client.js';
 
 	let profile = null;
 	let ouraConnected = false;
@@ -109,7 +109,7 @@
 			successMessage = null;
 
 			// Get OAuth URL instead of using token directly
-			const response = await ouraApi.getOuraAuthUrl();
+			const response = await sleepApi.getOuraAuthUrl();
 			const authUrl = response.data.authorizationUrl;
 			
 			// Redirect to Oura authorization page

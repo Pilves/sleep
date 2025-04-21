@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { authUser } from '$lib/stores/authStore';
 	import { page } from '$app/stores';
-	import { userApi, ouraApi, sleepApi } from '$lib/services/api.client.js';
+	import { userApi, sleepApi } from '$lib/services/api.client.js';
 
 	let profile = null;
 	let ouraConnected = false;
@@ -108,7 +108,7 @@
 			successMessage = null;
 
 			// Get OAuth URL
-			const response = await ouraApi.getOuraAuthUrl();
+			const response = await sleepApi.getOuraAuthUrl();
 			const authUrl = response.data.authorizationUrl;
 			
 			// Redirect to Oura authorization page
@@ -153,7 +153,7 @@
 			successMessage = null;
 
 			// Call the disconnect API
-			await ouraApi.disconnectOura();
+			await sleepApi.disconnectOura();
 			
 			// Update local state
 			ouraConnected = false;
